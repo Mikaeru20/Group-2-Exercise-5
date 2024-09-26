@@ -40,6 +40,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
 }
 //The message indicates that the inputs have been successfully submitted.
+if (empty($nameErr) && empty($emailErr) && empty($sectionErr) && empty($passwordErr) && empty($genderErr)) {
+  $successMessage = "submitted successfully!";
+}
+  function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+  }
 ?>
 
 <!DOCTYPE html>
@@ -106,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: red;
         }
 
-        .success-message {
+        .success-box {
             color: green;
             font-size: 1rem;
             margin-top: 1px;
@@ -118,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 <div class="center-box">
     <h2>INFOMATION</h2>
-    <div class="success-message"><?php echo $successMessage; ?></div>
+    <div class="success-box"><?php echo $successMessage; ?></div>
     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
         <label for="name">Name:</label>
         <span class="error">* <?php echo $nameErr;?></span>
@@ -138,17 +147,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit">SUBMIT</button>
 
 <!--This will output all the necessary information you inputted-->
-<?php if (empty($nameErr) && empty($emailErr) && empty($sectionErr) && empty($passwordErr)) {
-    $successMessage = "submitted successfully!";
-?>
+<?php if (empty($nameErr) && empty($emailErr) && empty($sectionErr) && empty($passwordErr)): ?>
     <h2>Your Input:</h2>
     <p>Name: <?php echo $name; ?></p>
     <p>Section: <?php echo $section; ?></p>
     <p>Email: <?php echo $email; ?></p>
     <p>Password: <?php echo $password; ?></p>
-<?php 
-}
- ?>
+<?php endif; ?>
     </form>
     <script>
     // Function to suggest a password automatically when the password field is been pointed
@@ -164,7 +169,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         xhr.open('GET', 'passwords.php', true);
         xhr.send();
     }
-
     // Trigger the password suggestion when the user pointed on the password field
     document.getElementById('passwordField').addEventListener('focus', suggestPassword);
 </script>
